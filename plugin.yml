@@ -1,0 +1,8 @@
+name: ZombieDisguise
+version: 0.1
+author: lvxinlei
+main: top.dsbbs2.zd.Main
+depends: [ProtocolLib]
+commands:
+  zd:
+    usage: /zd <player>

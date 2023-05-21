@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="ZombieDisguise:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/ZombieDisguise_jar</output-path>
+    <root id="archive" name="ZombieDisguise.jar">
+      <element id="module-output" name="ZombieDisguise" />
+      <element id="file-copy" path="$PROJECT_DIR$/plugin.yml" />
+    </root>
+  </artifact>
+</component>
