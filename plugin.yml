@@ -1,5 +1,5 @@
 name: ZombieDisguise
-version: 0.5
+version: 0.6
 author: lvxinlei
 main: top.dsbbs2.zd.Main
 depends: [ProtocolLib]
