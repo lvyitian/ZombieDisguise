@@ -90,6 +90,8 @@ public class Main extends JavaPlugin implements Listener {
         z.setMaxHealth(p.getMaxHealth());
         z.setHealth(p.getHealth());
         z.setFireTicks(p.getFireTicks());
+        z.setCustomName(p.getName());
+        z.setCustomNameVisible(true);
         zombies.put(p.getUniqueId(),z);
         hidePlayer(p);
     }
