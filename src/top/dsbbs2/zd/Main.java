@@ -10,6 +10,7 @@ import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ProxiedCommandSender;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -170,14 +171,42 @@ public class Main extends JavaPlugin implements Listener {
             zombies.entrySet().stream().filter(i->Objects.equals(i.getValue(),e.getEntity())).findFirst().map(Map.Entry::getKey).map(Bukkit::getPlayer).ifPresent(i->i.damage(e.getFinalDamage(),damager2));
         }
     }
+    public static Player proxiedToPlayer(ProxiedCommandSender c)
+    {
+        if(c.getCallee() instanceof Player)
+            return (Player)c.getCallee();
+        else if(c.getCallee() instanceof ProxiedCommandSender)
+            return proxiedToPlayer((ProxiedCommandSender) c.getCallee());
+        else return null;
+    }
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(command.getName().equalsIgnoreCase("zd"))
         {
+            Player p=null;
             if(sender instanceof Player)
             {
-                disguise((Player)sender);
+                p=(Player)sender;
             }
+            if(sender instanceof ProxiedCommandSender)
+                p=proxiedToPlayer((ProxiedCommandSender) sender);
+            if(args.length>=1)
+            {
+                Player t=Bukkit.getPlayer(args[0]);
+                if(t==null)
+                {
+                    sender.sendMessage("目标玩家不在线!");
+                    return true;
+                }
+                p=t;
+            }
+            if(p==null)
+            {
+                sender.sendMessage("对于非玩家命令发送者，必须通过参数指定目标玩家!");
+                return false;
+            }
+            disguise(p);
+            return true;
         }
         return super.onCommand(sender, command, label, args);
     }

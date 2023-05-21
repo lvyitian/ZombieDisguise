@@ -5,4 +5,4 @@ main: top.dsbbs2.zd.Main
 depends: [ProtocolLib]
 commands:
   zd:
-    usage: /zd <player>
+    usage: /zd [player]
