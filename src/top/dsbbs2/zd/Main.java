@@ -65,6 +65,15 @@ public class Main extends JavaPlugin implements Listener {
             })
         ,0,1);
     }
+    @Override
+    public void onDisable()
+    {
+        zombies.values().forEach(Zombie::remove);
+        zombies.clear();
+        ignore.clear();
+        zombies=null;
+        ignore=null;
+    }
     public static void hidePlayer(Player p)
     {
         Bukkit.getOnlinePlayers().stream().filter(i->!Objects.equals(i,p)).forEach(i->i.hidePlayer(p));
