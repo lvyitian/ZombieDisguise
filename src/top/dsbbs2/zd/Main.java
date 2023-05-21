@@ -49,6 +49,8 @@ public class Main extends JavaPlugin implements Listener {
         Bukkit.getScheduler().runTaskTimer(this,()->
             zombies.forEach((k,v)->{
                 Player p=Bukkit.getPlayer(k);
+                v.setCustomName(p.getName());
+                v.setCustomNameVisible(true);
                 if(!p.isDead())
                 {
                     p.setVelocity(v.getVelocity());
