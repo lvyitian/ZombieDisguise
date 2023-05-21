@@ -8,6 +8,7 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ProxiedCommandSender;
@@ -16,8 +17,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
@@ -71,6 +74,7 @@ public class Main extends JavaPlugin implements Listener {
     @Override
     public void onDisable()
     {
+        zombies.keySet().stream().map(Bukkit::getPlayer).forEach(this::showPlayer);
         zombies.values().forEach(Zombie::remove);
         zombies.clear();
         ignore.clear();
@@ -80,6 +84,10 @@ public class Main extends JavaPlugin implements Listener {
     public void hidePlayer(Player p)
     {
         Bukkit.getOnlinePlayers().stream().filter(i->!Objects.equals(i,p)).forEach(i->i.hidePlayer(this,p));
+    }
+    public void showPlayer(Player p)
+    {
+        Bukkit.getOnlinePlayers().stream().filter(i->!Objects.equals(i,p)).forEach(i->i.showPlayer(this,p));
     }
     public void disguise(Player p)
     {
@@ -96,6 +104,18 @@ public class Main extends JavaPlugin implements Listener {
         z.setCustomNameVisible(true);
         zombies.put(p.getUniqueId(),z);
         hidePlayer(p);
+    }
+    @EventHandler(priority = EventPriority.MONITOR,ignoreCancelled = true)
+    public void onPlayerInteractEntity(PlayerInteractEntityEvent e)
+    {
+        if(zombies.containsValue(e.getRightClicked()))
+        {
+            ItemStack itemStack=e.getPlayer().getInventory().getItem(e.getHand());
+            if(itemStack!=null&&itemStack.getType()==Material.NAME_TAG)
+            {
+                e.setCancelled(true);
+            }
+        }
     }
     @EventHandler(priority = EventPriority.MONITOR,ignoreCancelled = true)
     public void onPlayerQuit(PlayerQuitEvent e)
