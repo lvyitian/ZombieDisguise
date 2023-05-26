@@ -37,7 +37,7 @@ public class Main extends JavaPlugin implements Listener {
     public void onEnable()
     {
         Bukkit.getPluginManager().registerEvents(this,this);
-        ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(this) {
+        ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(this,PacketType.Play.Server.SPAWN_ENTITY) {
             @Override
             public void onPacketSending(PacketEvent event) {
                 if(PacketType.Play.Server.SPAWN_ENTITY.equals(event.getPacket().getType())) {
